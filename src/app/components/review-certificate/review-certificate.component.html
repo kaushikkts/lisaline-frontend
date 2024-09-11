@@ -1,6 +1,66 @@
-<div class="container">
-  <div class="container__product-details">trest</div>
-  <div class="container__reference-instrumentation">dfg</div>
-  <div class="container__environment-conditions">fgh</div>
-  <div class="container__temperature-validation">fgh</div>
-</div>
+<form>
+  <div class="container">
+    <div class="container__product-details">
+      <div class="container__product-details__title">
+        <h2>Product Details</h2>
+      </div>
+      <div class="container__product-details__content">
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Name" [formControl]="form.controls.productDetails.controls.name">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Type</mat-label>
+          <input matInput placeholder="Type" [formControl]="form.controls.productDetails.controls.type">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Resolution</mat-label>
+          <input matInput placeholder="Resolution" [formControl]="form.controls.productDetails.controls.resolution">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Range</mat-label>
+          <input matInput placeholder="Range" [formControl]="form.controls.productDetails.controls.range">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="container__reference-instrumentation">
+      <div class="container__reference-instrumentation__title">
+        <h2>Reference Instrumentation</h2>
+      </div>
+      <div class="container__reference-instrumentation__content">
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Model</mat-label>
+          <input matInput placeholder="Model">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Brand</mat-label>
+          <input matInput placeholder="Brand">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Serial Number</mat-label>
+          <input matInput placeholder="Serial Number">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Accuracy</mat-label>
+          <input matInput placeholder="Accuracy">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="container__environment-conditions">
+      <div class="container__environment-conditions__title">
+        <h2>Environment Conditions</h2>
+      </div>
+      <div class="container__environment-conditions__content">
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Temperature</mat-label>
+          <input matInput placeholder="Temperature">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="content__batch__form__input__field">
+          <mat-label>Humidity</mat-label>
+          <input matInput placeholder="Humidity">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="container__temperature-validation">fgh</div>
+  </div>
+</form>

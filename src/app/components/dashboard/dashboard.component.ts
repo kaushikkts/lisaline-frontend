@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
@@ -11,6 +11,8 @@ import { FormsModule } from "@angular/forms";
 import {BatchService} from "../../services/batch.service";
 import {DatePipe} from "@angular/common";
 import {ReviewCertificateService} from "../../services/review-certificate.service";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {ReviewCertificateComponent} from "../review-certificate/review-certificate.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +23,7 @@ import {ReviewCertificateService} from "../../services/review-certificate.servic
     MatIconModule,
     MatIconButton,
     MatButton,
+    MatDialogModule,
     RouterLink,
     MatMiniFabButton,
     MatFabButton,
@@ -33,7 +36,7 @@ import {ReviewCertificateService} from "../../services/review-certificate.servic
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
-
+  dialog = inject(MatDialog);
   batchId: string = "";
   quantity: number | undefined;
   masterCertificate: any = null;
@@ -46,6 +49,7 @@ export class DashboardComponent {
   constructor(private batchService: BatchService, private reviewService: ReviewCertificateService) {
     this.batchService = batchService;
     this.reviewService = reviewService;
+    this.dialog.open(ReviewCertificateComponent);
   }
 
   onFileSelected(event: any) {
@@ -96,9 +100,7 @@ export class DashboardComponent {
         let id = response[0]?.id;
         this.batchService.uploadBatchFiles(files, id).subscribe((data: any) => {
           console.log(data);
-          // this.reviewService.getCertificateData(id).subscribe((certificateJSONData: any) => {
-          //   console.log(certificateJSONData);
-          // })
+
         })
       })
     } else {
