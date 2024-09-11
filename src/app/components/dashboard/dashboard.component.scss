@@ -1,0 +1,71 @@
+.navigation {
+  display: flex;
+  background-color: #2f3ea0;
+
+  &__title {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+    color: white;
+    align-self: center;
+  }
+
+  &__menu {
+    margin-left: auto;
+    align-self: flex-end;
+    color: white;
+
+    &__settings_button {
+      color: white;
+    }
+  }
+}
+
+
+.content {
+    &__batch {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+        &__header {
+            margin: 0 auto;
+
+          &__title {
+            font-weight: bold;
+          }
+        }
+
+        &__form {
+          display: flex;
+
+          &__submit {
+            display: flex;
+            justify-content: center;
+          }
+
+          &__input {
+            display: flex;
+            justify-content: space-evenly;
+            margin: 10px 0;
+          }
+
+          &__uploads {
+            display: flex;
+            justify-content: space-evenly;
+            margin: 10px 0;
+
+            &__container {
+              display: flex;
+              flex-direction: column;
+              margin: 10px;
+            }
+
+            &__button {
+              margin: 10px;
+            }
+          }
+
+
+        }
+    }
+}

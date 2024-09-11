@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  &__product-details {
+    background-color: red;
+  }
+
+  &__reference-instrumentation {
+    background-color: blue;
+  }
+
+  &__environment-conditions {
+    background-color: green;
+  }
+
+  &__temperature-validation {
+    background-color: yellow;
+  }
+}

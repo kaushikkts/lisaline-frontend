@@ -1,0 +1,63 @@
+<div class="container">
+  <!-- Navigation Start -->
+  <nav class="navigation">
+    <h1 class="navigation__title">LISALINE</h1>
+    <div class="navigation__menu">
+      <button mat-icon-button class="navigation__menu__settings_button" aria-label="Example icon button with a menu icon" [matMenuTriggerFor]="menu">
+        <mat-icon>settings</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Change Password</button>
+        <button mat-menu-item>Logout</button>
+      </mat-menu>
+    </div>
+  </nav>
+  <!-- Navigation End -->
+  <div class="content">
+    <section class="content__batch">
+      <div class="content__batch__header">
+        <h2 class="content__batch__header__title">Create New Batch</h2>
+      </div>
+      <div class="content__batch_form">
+        <div class="content__batch__form__input">
+          <mat-form-field appearance="outline" class="content__batch__form__input__field">
+            <input matInput placeholder="Batch Number" required [(ngModel)]="batchId">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="content__batch__form__input__field">
+            <input matInput placeholder="Quantity" type="number" required name="quantity" [(ngModel)]="quantity">
+          </mat-form-field>
+        </div>
+        <div class="content__batch__form__input">
+          <mat-form-field appearance="outline" class="content__batch__form__input__field">
+            <input matInput placeholder="Inspector Name" required name="inspector" [(ngModel)]="inspectorName">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="content__batch__form__input__field">
+            <input matInput placeholder="Calibration Date" required name="calibrationDate" [(ngModel)]="calibrationDate">
+          </mat-form-field>
+        </div>
+        <div class="content__batch__form__uploads">
+          <div class="">
+            <button type="button" class="content__batch__form__uploads__button" mat-raised-button (click)="masterCertificate.click()">Choose Master Certificate</button>
+            <input hidden (change)="onFileSelected($event)" #masterCertificate type="file" id="masterCertificatePDF" required name="certificatePDF" ngModel>
+            @if (masterCertificateFileName) {
+              <p>{{ masterCertificateFileName }}</p>
+            }
+          </div>
+          <div class="">
+            <button type="button" class="content__batch__form__uploads__button" mat-raised-button (click)="jungCSV.click()">Choose Jung CSV</button>
+            <input hidden (change)="onFileSelected($event)" #jungCSV type="file" id="jungFileCSV" required name="jungCSV" ngModel>
+            @if (jungCSVFileName) {
+              <p>{{ jungCSVFileName }}</p>
+            }
+          </div>
+        </div>
+
+        <div class="content__batch__form__submit">
+          <button mat-raised-button class="content__batch__form__submit" color="primary" type="submit" (click)="createBatch()">Create Batch</button>
+        </div>
+      </div>
+
+    </section>
+    <section class="content__download"></section>
+  </div>
+</div>
