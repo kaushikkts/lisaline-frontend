@@ -23,7 +23,7 @@ export class AuthService {
 
   }
   isLoggedIn() {
-    console.log(localStorage.getItem('token'));
+    console.log(JSON.parse(<string>localStorage.getItem('token')));
     if (!localStorage.getItem('token')) {
       return false;
     }

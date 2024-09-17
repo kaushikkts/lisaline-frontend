@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
@@ -58,7 +58,7 @@ import {AuthService} from "../../services/auth.service";
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   dialog = inject(MatDialog);
   batchId: string = "";
   quantity: number | undefined;
@@ -92,6 +92,10 @@ export class DashboardComponent {
     this.toastrService = toastrService;
     this.authService = authService;
 
+  }
+
+  ngOnInit() {
+    this.loadAllBatches();
   }
 
   onFileSelected(event: any) {
@@ -166,6 +170,7 @@ export class DashboardComponent {
   loadAllBatches() {
     this.reviewService.getAllBatches().subscribe((response: any) => {
       this.batches = response;
+      console.log(response)
     })
   }
 
