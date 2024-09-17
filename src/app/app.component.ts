@@ -117,7 +117,7 @@ export class AppComponent implements AfterViewInit {
     let form = new FormData();
     form.append(`master_certificate`, file);
     console.log(form);
-    this.http.post('http://localhost:3000/api/batch/pdf', form, {
+    this.http.post('https://ec2-15-207-14-9.ap-south-1.compute.amazonaws.com:3000/api/batch/pdf', form, {
 
     }).subscribe((data) => {
       console.log(data);

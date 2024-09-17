@@ -13,6 +13,17 @@ import {DatePipe} from "@angular/common";
 import {ReviewCertificateService} from "../../services/review-certificate.service";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {ReviewCertificateComponent} from "../review-certificate/review-certificate.component";
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatRow,
+  MatTable, MatTableModule
+} from "@angular/material/table";
+import {MatTooltip} from "@angular/material/tooltip";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-dashboard',
@@ -30,7 +41,17 @@ import {ReviewCertificateComponent} from "../review-certificate/review-certifica
     MatFormField,
     MatInput,
     FormsModule,
-    DatePipe
+    DatePipe,
+    MatTable,
+    MatHeaderCell,
+    MatColumnDef,
+    MatCell,
+    MatCellDef,
+    MatHeaderCellDef,
+    MatHeaderRow,
+    MatRow,
+    MatTableModule,
+    MatTooltip
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -45,16 +66,30 @@ export class DashboardComponent {
   jungCSVFileName: string = "";
   inspectorName: string = "";
   calibrationDate: string = "";
+  batches: any[] = [
+    {
+      id: 1,
+      batchNumber: "BH3433",
+      quantity: 100,
+      calibrationDate: "2021-09-21",
+      inspector: "John Doe",
+      masterCertificate: null,
+      jungCSV: "jung.csv",
+      areteBatchNumber: "ARETE-3433"
+    }
+  ];
+  displayedColumns: any[] = ["batchNumber", "quantity", "calibrationDate", "inspector", "masterCertificate", "jungCSV", "areteBatchNumber"];
 
-  constructor(private batchService: BatchService, private reviewService: ReviewCertificateService) {
+  constructor(private batchService: BatchService, private reviewService: ReviewCertificateService, private toastrService: ToastrService) {
     this.batchService = batchService;
     this.reviewService = reviewService;
-    this.dialog.open(ReviewCertificateComponent);
+    this.toastrService = toastrService;
+
   }
 
   onFileSelected(event: any) {
     console.log(event.target.files[0])
-
+    this.toastrService.info('Uploading file');
     if (event.target.files[0]["type"] === 'application/vnd.ms-excel') {
       this.jungCSV = event.target.files[0];
       this.jungCSVFileName = event.target.files[0].name;
@@ -64,6 +99,22 @@ export class DashboardComponent {
       this.masterCertificate = event.target.files[0];
       this.masterCertificateFileName = event.target.files[0].name;
     }
+  }
+
+  uploadMasterCertificate(event: any) {
+    if (event.target.files[0]["type"] !== 'application/pdf') {
+      console.log('Please upload a PDF file');
+      return;
+    }
+    console.log(event.target.files[0]);
+    this.masterCertificate = event.target.files[0];
+    this.masterCertificateFileName = event.target.files[0].name;
+  }
+
+  uploadJungCSV(event: any) {
+    console.log(event.target.files[0]);
+    this.jungCSV = event.target.files[0];
+    this.jungCSVFileName = event.target.files[0].name;
   }
 
   createBatch() {
@@ -78,9 +129,7 @@ export class DashboardComponent {
     if (
       this.batchId &&
       this.quantity &&
-      this.masterCertificate &&
-      this.jungCSV &&
-      this.calibrationDate
+      this.masterCertificate
     ) {
       let masterCertificateForm = new FormData();
       let jungCSVForm = new FormData();
@@ -99,12 +148,17 @@ export class DashboardComponent {
       this.batchService.createBatch(batch).subscribe((response: any) => {
         let id = response[0]?.id;
         this.batchService.uploadBatchFiles(files, id).subscribe((data: any) => {
-          console.log(data);
-
+          this.dialog.open(ReviewCertificateComponent, {data: data});
         })
       })
     } else {
       console.log('Please fill all the fields');
     }
+  }
+
+  loadAllBatches() {
+    this.reviewService.getAllBatches().subscribe((response: any) => {
+      this.batches = response;
+    })
   }
 }

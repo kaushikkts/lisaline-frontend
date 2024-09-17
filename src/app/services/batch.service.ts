@@ -12,7 +12,7 @@ export class BatchService {
 
   createBatch(batch: any) {
     console.log(batch);
-    return this.http.post('http://localhost:3000/api/batch', batch, {
+    return this.http.post('http://ec2-15-207-14-9.ap-south-1.compute.amazonaws.com/api/batch', batch, {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -23,7 +23,7 @@ export class BatchService {
     let form = new FormData();
     form.append('master_certificate', files.masterCertificate);
     form.append('jung_csv', files.jungCSV);
-    return this.http.post(`http://localhost:3000/api/batch/files/${batchPK}`, form, {
+    return this.http.post(`http://ec2-15-207-14-9.ap-south-1.compute.amazonaws.com/api/batch/files/${batchPK}`, form, {
     });
   }
 }

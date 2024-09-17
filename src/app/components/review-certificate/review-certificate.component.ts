@@ -1,7 +1,18 @@
-import { Component } from '@angular/core';
-import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
+import {MAT_DIALOG_DATA, MatDialogContent} from "@angular/material/dialog";
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef, MatHeaderRow,
+  MatHeaderRowDef, MatRow, MatRowDef,
+  MatTable
+} from "@angular/material/table";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-review-certificate',
@@ -10,12 +21,30 @@ import {MatInput} from "@angular/material/input";
     MatFormField,
     MatInput,
     ReactiveFormsModule,
-    MatLabel
+    MatLabel,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRow,
+    MatRowDef,
+    MatDialogContent,
+    FormsModule,
+    NgForOf
   ],
   templateUrl: './review-certificate.component.html',
   styleUrl: './review-certificate.component.scss'
 })
-export class ReviewCertificateComponent {
+export class ReviewCertificateComponent implements OnInit {
+  reviewCertificateData: any;
+  tempValidation: FormArray<any> = new FormArray<any>([]);
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    console.log(data);
+  }
   form = new FormGroup({
     productDetails: new FormGroup({
       name: new FormControl('test'),
@@ -26,7 +55,6 @@ export class ReviewCertificateComponent {
     referenceInstrumentation: new FormGroup({
       model: new FormControl(''),
       brand: new FormControl(''),
-      calibrationDate: new FormControl(''),
       serialNumber: new FormControl(''),
       accuracy: new FormControl(''),
     }),
@@ -34,6 +62,52 @@ export class ReviewCertificateComponent {
       temperature: new FormControl(''),
       humidity: new FormControl(''),
     }),
-    temperatureValidation: new FormArray([])
+    temperatureValidation: new FormArray<any>([])
   });
+  temperatureValidationColumns: string[] = ['setPoints', 'deviation', 'result'];
+
+  ngOnInit() {
+    this.reviewCertificateData = this.data?.certificateData;
+    for (let i = 0; i < this.reviewCertificateData?.temperatureValidation.length; i++) {
+      this.tempValidation.push(new FormGroup({
+        setPoints: new FormControl(this.reviewCertificateData?.temperatureValidation[i].setPoints),
+        deviation: new FormControl(this.reviewCertificateData?.temperatureValidation[i].deviation),
+        result: new FormControl(this.reviewCertificateData?.temperatureValidation[i].result),
+      }));
+    }
+    console.log(this.reviewCertificateData, this.reviewCertificateData?.certificateData);
+    this.form = new FormGroup({
+      productDetails: new FormGroup({
+        name: new FormControl(this.reviewCertificateData?.productDetails.name),
+        type: new FormControl(this.reviewCertificateData?.productDetails.type),
+        resolution: new FormControl(this.reviewCertificateData?.productDetails.resolution),
+        range: new FormControl(this.reviewCertificateData?.productDetails.range),
+      }),
+      referenceInstrumentation: new FormGroup({
+        model: new FormControl(this.reviewCertificateData?.referenceInstrumentation.model),
+        brand: new FormControl(this.reviewCertificateData?.referenceInstrumentation.brand),
+        serialNumber: new FormControl(this.reviewCertificateData?.referenceInstrumentation.serialNumber),
+        accuracy: new FormControl(this.reviewCertificateData?.referenceInstrumentation.accuracy),
+      }),
+      temperatureAndHumidity: new FormGroup({
+        temperature: new FormControl(this.reviewCertificateData?.temperatureAndHumidity.temperature),
+        humidity: new FormControl(this.reviewCertificateData?.temperatureAndHumidity.humidity),
+      }),
+      temperatureValidation: this.tempValidation
+    });
+
+  }
+
+
+  get temperatureValidationValues() {
+    let test = this.form.get('temperatureValidation') as FormArray;
+
+
+    return this.form.get('temperatureValidation') as FormArray;
+  }
+  submitChanges() {
+    console.log(this.form.value);
+  }
+
+  protected readonly JSON = JSON;
 }

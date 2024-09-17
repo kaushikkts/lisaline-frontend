@@ -56,6 +56,19 @@
   }
 
   &__temperature-validation {
-    background-color: yellow;
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+      display: flex;
+      justify-content: center;
+    }
+
+    &__content {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 10px;
+
+    }
   }
 }

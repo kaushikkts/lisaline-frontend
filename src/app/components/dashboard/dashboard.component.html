@@ -56,8 +56,55 @@
           <button mat-raised-button class="content__batch__form__submit" color="primary" type="submit" (click)="createBatch()">Create Batch</button>
         </div>
       </div>
-
     </section>
-    <section class="content__download"></section>
+    <section class="content__batch-history">
+      <div class="content__batch-history__header">
+        <h2 class="content__batch-history__header__title">Batch History</h2>
+      </div>
+      <div class="content__batch-history__table">
+        <table mat-table [dataSource]="batches" class="content__batch-history__table__table">
+          <ng-container matColumnDef="batchNumber">
+            <th mat-header-cell *matHeaderCellDef> Batch ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.batchNumber}} </td>
+          </ng-container>
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef> Quantity </th>
+            <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+          </ng-container>
+          <ng-container matColumnDef="inspector">
+            <th mat-header-cell *matHeaderCellDef> Inspector Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.inspector}} </td>
+          </ng-container>
+          <ng-container matColumnDef="calibrationDate">
+            <th mat-header-cell *matHeaderCellDef> Calibration Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.calibrationDate}} </td>
+          </ng-container>
+          <ng-container matColumnDef="masterCertificate">
+            <th mat-header-cell *matHeaderCellDef> Master Certificate </th>
+            <td mat-cell *matCellDef="let element">
+              @if (element.masterCertificate) {
+                <a href="{{element.masterCertificate}}" target="_blank" class="">
+                  <mat-icon matTooltip="View PDF">picture_as_pdf</mat-icon>
+                </a>
+              } @else {
+                <button mat-icon-button>
+                  <mat-icon matTooltip="Upload Certificate">cloud_upload</mat-icon>
+                </button>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="jungCSV">
+            <th mat-header-cell *matHeaderCellDef> Jung CSV </th>
+            <td mat-cell *matCellDef="let element"> {{element.jungCSV}} </td>
+          </ng-container>
+          <ng-container matColumnDef="areteBatchNumber">
+            <th mat-header-cell *matHeaderCellDef> Arete Batch No </th>
+            <td mat-cell *matCellDef="let element"> {{element.areteBatchNumber}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </section>
   </div>
 </div>
