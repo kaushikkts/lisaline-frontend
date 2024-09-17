@@ -24,6 +24,8 @@ import {
 } from "@angular/material/table";
 import {MatTooltip} from "@angular/material/tooltip";
 import {ToastrService} from "ngx-toastr";
+import {LogoutService} from "../../services/logout.service";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -80,10 +82,15 @@ export class DashboardComponent {
   ];
   displayedColumns: any[] = ["batchNumber", "quantity", "calibrationDate", "inspector", "masterCertificate", "jungCSV", "areteBatchNumber"];
 
-  constructor(private batchService: BatchService, private reviewService: ReviewCertificateService, private toastrService: ToastrService) {
+  constructor(
+    private batchService: BatchService,
+    private reviewService: ReviewCertificateService,
+    private toastrService: ToastrService,
+    private authService: AuthService) {
     this.batchService = batchService;
     this.reviewService = reviewService;
     this.toastrService = toastrService;
+    this.authService = authService;
 
   }
 
@@ -160,5 +167,9 @@ export class DashboardComponent {
     this.reviewService.getAllBatches().subscribe((response: any) => {
       this.batches = response;
     })
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

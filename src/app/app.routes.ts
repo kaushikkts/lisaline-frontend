@@ -7,21 +7,20 @@ import {authGuard} from "./guards/auth.guard";
 
 export const routes: Routes = [
   {
-    component: LoginComponent,
-    path: ''
-  },
-  {
     component: DashboardComponent,
     path: 'dashboard',
     canActivate: [authGuard]
   },
   {
     component: ReviewCertificateComponent,
-    path: 'review-certificate'
+    path: 'review-certificate',
+    canActivate: [authGuard]
+
   },
   {
     component: LoginComponent,
-    path: 'login'
+    path: 'login',
+
   },
   {
     component: PageNotFoundComponent,
