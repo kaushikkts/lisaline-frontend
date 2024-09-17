@@ -22,7 +22,7 @@
         <div class="content__batch__form__input">
           <mat-form-field appearance="outline" class="content__batch__form__input__field">
             <mat-label>Batch Number</mat-label>
-            <input matInput placeholder="Batch Number" required [(ngModel)]="batchId">
+            <input matInput placeholder="Batch Number" required [(ngModel)]="batchNumber">
           </mat-form-field>
           <mat-form-field appearance="outline" class="content__batch__form__input__field">
             <mat-label>Quantity</mat-label>
@@ -99,7 +99,15 @@
           </ng-container>
           <ng-container matColumnDef="jungCSV">
             <th mat-header-cell *matHeaderCellDef> Jung CSV </th>
-            <td mat-cell *matCellDef="let element"> {{element.jungCSV}} </td>
+            <td mat-cell *matCellDef="let element"> @if (element.masterCertificate) {
+              <a href="{{element.jungCSV}}" target="_blank" class="">
+                <mat-icon matRipple matTooltip="View PDF">picture_as_pdf</mat-icon>
+              </a>
+            } @else {
+              <button mat-icon-button>
+                <mat-icon matTooltip="Upload Jung File">cloud_upload</mat-icon>
+              </button>
+            } </td>
           </ng-container>
           <ng-container matColumnDef="areteBatchNumber">
             <th mat-header-cell *matHeaderCellDef> Arete Batch No </th>

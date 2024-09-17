@@ -64,13 +64,12 @@ import {ChangePasswordComponent} from "../change-password/change-password.compon
 })
 export class DashboardComponent implements OnInit {
   dialog = inject(MatDialog);
-  batchId: string = "";
+  batchNumber: string = "";
   quantity: number | undefined;
   masterCertificate: any = null;
   jungCSV: any = null;
   masterCertificateFileName: string = "";
   jungCSVFileName: string = "";
-  inspectorName: string = "";
   calibrationDate: string = "";
   batches: any[] = [];
   displayedColumns: any[] = ["batchNumber", "quantity", "calibrationDate", "inspector", "masterCertificate", "jungCSV", "areteBatchNumber"];
@@ -124,39 +123,36 @@ export class DashboardComponent implements OnInit {
   createBatch() {
     console.log('Creating batch');
     console.log(
-      this.batchId,
-      this.calibrationDate,
+      this.batchNumber,
       this.quantity,
-      this.masterCertificate,
-      this.jungCSV
     )
     if (
-      this.batchId &&
-      this.quantity &&
-      this.masterCertificate
+      this.batchNumber &&
+      this.quantity
     ) {
       let masterCertificateForm = new FormData();
       let jungCSVForm = new FormData();
       masterCertificateForm.append('masterCertificate', this.masterCertificate);
       jungCSVForm.append('jungCSV', this.jungCSV);
       const batch = {
-        batchId: this.batchId,
+        batchNumber: this.batchNumber,
         calibrationDate: this.calibrationDate,
         quantity: this.quantity,
-        inspectorName: this.inspectorName
       }
-      const files = {
-        masterCertificate: this.masterCertificate,
-        jungCSV: this.jungCSV,
-      }
+      // const files = {
+      //   masterCertificate: this.masterCertificate,
+      //   jungCSV: this.jungCSV,
+      // }
       this.batchService.createBatch(batch).subscribe((response: any) => {
-        let id = response[0]?.id;
-        this.batchService.uploadBatchFiles(files, id).subscribe((data: any) => {
-          this.dialog.open(ReviewCertificateComponent, {data: data});
-        })
+        this.toastrService.success('Batch created successfully', 'Success');
+        this.loadAllBatches();
+        // let id = response[0]?.id;
+        // this.batchService.uploadBatchFiles(files, id).subscribe((data: any) => {
+        //   this.dialog.open(ReviewCertificateComponent, {data: data});
+        // })
       })
     } else {
-      console.log('Please fill all the fields');
+      this.toastrService.error('Please fill all the fields', 'Invalid Form');
     }
   }
 
