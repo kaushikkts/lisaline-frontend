@@ -104,20 +104,47 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  uploadMasterCertificate(event: any) {
+  uploadMasterCertificate(event: any, element: any) {
     if (event.target.files[0]["type"] !== 'application/pdf') {
-      console.log('Please upload a PDF file');
+      this.toastrService.error('Please upload a PDF file', 'Invalid File Type');
       return;
     }
-    console.log(event.target.files[0]);
     this.masterCertificate = event.target.files[0];
     this.masterCertificateFileName = event.target.files[0].name;
+    this.toastrService.info(`Uploading Master Certificate ${this.masterCertificateFileName}`);
+    this.batchService.uploadMasterCertificate(this.masterCertificate, element?.id).subscribe({
+      next: (response: any) => {
+        this.toastrService.success('Master Certificate uploaded successfully', 'Success');
+        console.log(response);
+      },
+      error: (error: any) => {
+        this.toastrService.error('Error uploading Master Certificate', 'Error');
+        console.log(error);
+      }
+    })
+    console.log(`Value of element : - ${element?.id}`);
   }
 
-  uploadJungCSV(event: any) {
-    console.log(event.target.files[0]);
-    this.jungCSV = event.target.files[0];
-    this.jungCSVFileName = event.target.files[0].name;
+  uploadJungCSV(event: any, element: any) {
+    if (event.target.files[0]["type"] === 'application/vnd.ms-excel') {
+      const jungCSV = event.target.files[0];
+      const jungCSVFileName = event.target.files[0].name;
+      this.calibrationDate = this.jungCSVFileName.split('_').join(',').split('.')[0].split(',')[1];
+      this.toastrService.info(`Uploading Jung CSV ${jungCSVFileName}`);
+      this.batchService.uploadJungCSV(jungCSV, element?.id).subscribe({
+        next: (response: any) => {
+          this.toastrService.success('Jung CSV uploaded successfully', 'Success');
+          console.log(response);
+        },
+        error: (error: any) => {
+          this.toastrService.error('Error uploading Jung CSV', 'Error');
+          console.log(error);
+        }
+      })
+    } else {
+      this.toastrService.error('Please upload a CSV file', 'Invalid File Type');
+      return;
+    }
   }
 
   createBatch() {

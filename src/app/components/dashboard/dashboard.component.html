@@ -90,8 +90,10 @@
                 <a href="{{element.masterCertificate}}" target="_blank" class="">
                   <mat-icon matRipple matTooltip="View PDF">picture_as_pdf</mat-icon>
                 </a>
+
               } @else {
-                <button mat-icon-button>
+                <input hidden (change)="uploadMasterCertificate($event, element)" #masterCertificate type="file" id="masterCertificatePDF" required name="certificatePDF" ngModel>
+                <button mat-icon-button (click)="masterCertificate.click()">
                   <mat-icon matTooltip="Upload Certificate">cloud_upload</mat-icon>
                 </button>
               }
@@ -99,12 +101,13 @@
           </ng-container>
           <ng-container matColumnDef="jungCSV">
             <th mat-header-cell *matHeaderCellDef> Jung CSV </th>
-            <td mat-cell *matCellDef="let element"> @if (element.masterCertificate) {
+            <td mat-cell *matCellDef="let element"> @if (element.jungCSV) {
               <a href="{{element.jungCSV}}" target="_blank" class="">
                 <mat-icon matRipple matTooltip="View PDF">picture_as_pdf</mat-icon>
               </a>
             } @else {
-              <button mat-icon-button>
+              <input hidden (change)="uploadJungCSV($event, element)" #jungCSV type="file" id="masterCertificatePDF" required name="certificatePDF" ngModel>
+              <button mat-icon-button (click)="jungCSV.click()">
                 <mat-icon matTooltip="Upload Jung File">cloud_upload</mat-icon>
               </button>
             } </td>

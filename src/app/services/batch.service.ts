@@ -21,10 +21,16 @@ export class BatchService {
     });
   }
 
-  uploadBatchFiles(files: any, batchPK: string) {
+  uploadMasterCertificate(file: any, batchPK: string) {
     let form = new FormData();
-    form.append('master_certificate', files.masterCertificate);
-    form.append('jung_csv', files.jungCSV);
+    form.append('master_certificate', file);
+    return this.http.post(`http://localhost:3000/api/batch/files/${batchPK}`, form, {
+    });
+  }
+
+  uploadJungCSV(file: any, batchPK: string) {
+    let form = new FormData();
+    form.append('jung_csv', file);
     return this.http.post(`http://localhost:3000/api/batch/files/${batchPK}`, form, {
     });
   }
