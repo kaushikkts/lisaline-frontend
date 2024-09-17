@@ -4,7 +4,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButton, MatFabButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
-import {MatFormField} from "@angular/material/form-field";
+import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 
 import { FormsModule } from "@angular/forms";
@@ -26,6 +26,8 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {ToastrService} from "ngx-toastr";
 import {LogoutService} from "../../services/logout.service";
 import {AuthService} from "../../services/auth.service";
+import {MatRipple} from "@angular/material/core";
+import {ChangePasswordComponent} from "../change-password/change-password.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -53,7 +55,9 @@ import {AuthService} from "../../services/auth.service";
     MatHeaderRow,
     MatRow,
     MatTableModule,
-    MatTooltip
+    MatTooltip,
+    MatLabel,
+    MatRipple
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -68,18 +72,7 @@ export class DashboardComponent implements OnInit {
   jungCSVFileName: string = "";
   inspectorName: string = "";
   calibrationDate: string = "";
-  batches: any[] = [
-    {
-      id: 1,
-      batchNumber: "BH3433",
-      quantity: 100,
-      calibrationDate: "2021-09-21",
-      inspector: "John Doe",
-      masterCertificate: null,
-      jungCSV: "jung.csv",
-      areteBatchNumber: "ARETE-3433"
-    }
-  ];
+  batches: any[] = [];
   displayedColumns: any[] = ["batchNumber", "quantity", "calibrationDate", "inspector", "masterCertificate", "jungCSV", "areteBatchNumber"];
 
   constructor(
@@ -176,5 +169,9 @@ export class DashboardComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  changePassword() {
+    this.dialog.open(ChangePasswordComponent);
   }
 }

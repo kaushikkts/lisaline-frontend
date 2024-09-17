@@ -3,6 +3,7 @@ import {MatButton} from "@angular/material/button";
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-login',
@@ -22,18 +23,24 @@ export class LoginComponent {
     password: new FormControl('')
  })
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService, private toastrService: ToastrService) {
+
   }
 
   login() {
    console.log(this.authForm.value);
    const auth = this.authForm.value;
    console.log(auth?.email, auth?.password);
-    this.authService.login(auth?.email, auth?.password).subscribe((res: any) => {
-      if (res.email) {
-        localStorage.setItem('token', JSON.stringify({isAuthenticated: true, email: res.email, id: res.id}));
+   this.authService.login(auth?.email, auth?.password).subscribe({
+     next: (response: any) => {
+       if (response.email) {
+         localStorage.setItem('token', JSON.stringify({isAuthenticated: true, email: response.email, id: response.id}));
+       }
+       this.router.navigate(['/dashboard']);
+     },
+      error: (error: any) => {
+       this.toastrService.error(error.error.message, 'Login Error');
       }
-      this.router.navigate(['/dashboard']);
-    })
+   })
   }
 }

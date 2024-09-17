@@ -20,8 +20,18 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
-
   }
+
+  changePassword(changePasswordBody: any) {
+    console.log(changePasswordBody);
+    const email = JSON.parse(<string>localStorage.getItem('token')).email;
+    return this.http.post('http://localhost:3000/api/change-password', {
+      email: email,
+      currentPassword: changePasswordBody.currentPassword,
+      newPassword: changePasswordBody.newPassword
+    });
+  }
+
   isLoggedIn() {
     console.log(JSON.parse(<string>localStorage.getItem('token')));
     if (!localStorage.getItem('token')) {
