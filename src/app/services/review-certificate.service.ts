@@ -9,11 +9,11 @@ export class ReviewCertificateService {
   constructor(private http: HttpClient) { }
 
   getCertificateData(batchId: string) {
-    return this.http.get(`http://localhost:3000/api/review/${batchId}`);
+    return this.http.get(`https://65.20.79.92.nip.io/api/review/${batchId}`);
   }
 
   getAllBatches() {
     const inspectorId = JSON.parse(<string>localStorage.getItem('token')).id;
-    return this.http.get(`http://localhost:3000/api/batch/${inspectorId}`);
+    return this.http.get(`https://65.20.79.92.nip.io/api/batch/${inspectorId}`);
   }
 }

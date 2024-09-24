@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit, ViewChild} from '@angular/core';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
@@ -20,7 +20,7 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow, MatRow,
-  MatTable, MatTableModule
+  MatTable, MatTableDataSource, MatTableModule
 } from "@angular/material/table";
 import {MatTooltip} from "@angular/material/tooltip";
 import {ToastrService} from "ngx-toastr";
@@ -28,6 +28,8 @@ import {LogoutService} from "../../services/logout.service";
 import {AuthService} from "../../services/auth.service";
 import {MatRipple} from "@angular/material/core";
 import {ChangePasswordComponent} from "../change-password/change-password.component";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-dashboard',
@@ -57,12 +59,13 @@ import {ChangePasswordComponent} from "../change-password/change-password.compon
     MatTableModule,
     MatTooltip,
     MatLabel,
-    MatRipple
+    MatRipple,
+    MatPaginator
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   dialog = inject(MatDialog);
   batchNumber: string = "";
   quantity: number | undefined;
@@ -71,8 +74,13 @@ export class DashboardComponent implements OnInit {
   masterCertificateFileName: string = "";
   jungCSVFileName: string = "";
   calibrationDate: string = "";
-  batches: any[] = [];
+  batches: MatTableDataSource<unknown, MatPaginator> = new MatTableDataSource();
   displayedColumns: any[] = ["batchNumber", "quantity", "calibrationDate", "inspector", "masterCertificate", "jungCSV", "areteBatchNumber"];
+
+  // @ts-ignore
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ts-ignore
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private batchService: BatchService,
@@ -88,6 +96,11 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadAllBatches();
+  }
+
+  ngAfterViewInit() {
+    this.batches.paginator = this.paginator;
+    this.batches.sort = this.sort;
   }
 
   onFileSelected(event: any) {
@@ -115,7 +128,9 @@ export class DashboardComponent implements OnInit {
     this.batchService.uploadMasterCertificate(this.masterCertificate, element?.id).subscribe({
       next: (response: any) => {
         this.toastrService.success('Master Certificate uploaded successfully', 'Success');
+        this.loadAllBatches();
         console.log(response);
+        this.dialog.open(ReviewCertificateComponent, {data: response?.data[0]?.content});
       },
       error: (error: any) => {
         this.toastrService.error('Error uploading Master Certificate', 'Error');
@@ -132,13 +147,13 @@ export class DashboardComponent implements OnInit {
       this.calibrationDate = this.jungCSVFileName.split('_').join(',').split('.')[0].split(',')[1];
       this.toastrService.info(`Uploading Jung CSV ${jungCSVFileName}`);
       this.batchService.uploadJungCSV(jungCSV, element?.id).subscribe({
-        next: (response: any) => {
+        next: () => {
           this.toastrService.success('Jung CSV uploaded successfully', 'Success');
-          console.log(response);
+          this.loadAllBatches();
         },
         error: (error: any) => {
-          this.toastrService.error('Error uploading Jung CSV', 'Error');
-          console.log(error);
+          this.toastrService.error(`${error.error.message}`, 'Error uploading Jung CSV');
+          console.log();
         }
       })
     } else {
@@ -171,6 +186,8 @@ export class DashboardComponent implements OnInit {
       //   jungCSV: this.jungCSV,
       // }
       this.batchService.createBatch(batch).subscribe((response: any) => {
+        this.batchNumber = " ";
+        this.quantity = 0;
         this.toastrService.success('Batch created successfully', 'Success');
         this.loadAllBatches();
         // let id = response[0]?.id;
@@ -185,8 +202,7 @@ export class DashboardComponent implements OnInit {
 
   loadAllBatches() {
     this.reviewService.getAllBatches().subscribe((response: any) => {
-      this.batches = response;
-      console.log(response)
+      this.batches.data = response;
     })
   }
 
@@ -196,5 +212,10 @@ export class DashboardComponent implements OnInit {
 
   changePassword() {
     this.dialog.open(ChangePasswordComponent);
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.batches.filter = filterValue.trim().toLowerCase();
   }
 }

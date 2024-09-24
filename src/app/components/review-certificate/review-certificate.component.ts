@@ -67,7 +67,7 @@ export class ReviewCertificateComponent implements OnInit {
   temperatureValidationColumns: string[] = ['setPoints', 'deviation', 'result'];
 
   ngOnInit() {
-    this.reviewCertificateData = this.data?.certificateData;
+    this.reviewCertificateData = this.data;
     for (let i = 0; i < this.reviewCertificateData?.temperatureValidation.length; i++) {
       this.tempValidation.push(new FormGroup({
         setPoints: new FormControl(this.reviewCertificateData?.temperatureValidation[i].setPoints),
@@ -95,7 +95,6 @@ export class ReviewCertificateComponent implements OnInit {
       }),
       temperatureValidation: this.tempValidation
     });
-
   }
 
 

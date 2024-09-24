@@ -14,12 +14,11 @@
         <label for="password">Password</label>
       </div>
 
-      <input type="password" id="password" placeholder="Enter your password" required formControlName="password" />
+      <input type="password" id="password" placeholder="Enter your password" required formControlName="password" (keyup.enter)="login()"  />
     </div>
 
     <!-- Login button -->
     <button type="submit">Log In</button>
 
-    <p class="sign_up">Don't have an account? <a href="#">Sign up</a></p>
   </form>
 </div>

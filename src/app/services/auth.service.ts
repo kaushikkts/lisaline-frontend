@@ -14,7 +14,7 @@ export class AuthService {
   }
 
   login(email: ɵValue<FormControl<string | null>> | undefined, password: ɵValue<FormControl<string | null>> | undefined) {
-    return this.http.post('http://localhost:3000/api/login', {email: email, password: password});
+    return this.http.post('https://65.20.79.92.nip.io/api/login', {email: email, password: password});
   }
 
   logout() {
@@ -25,7 +25,7 @@ export class AuthService {
   changePassword(changePasswordBody: any) {
     console.log(changePasswordBody);
     const email = JSON.parse(<string>localStorage.getItem('token')).email;
-    return this.http.post('http://localhost:3000/api/change-password', {
+    return this.http.post('https://65.20.79.92.nip.io/api/change-password', {
       email: email,
       currentPassword: changePasswordBody.currentPassword,
       newPassword: changePasswordBody.newPassword
