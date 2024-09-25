@@ -4,10 +4,10 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButton, MatFabButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 
-import { FormsModule } from "@angular/forms";
+import {FormControl, FormGroup, FormsModule} from "@angular/forms";
 import {BatchService} from "../../services/batch.service";
 import {DatePipe} from "@angular/common";
 import {ReviewCertificateService} from "../../services/review-certificate.service";
@@ -26,14 +26,26 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {ToastrService} from "ngx-toastr";
 import {LogoutService} from "../../services/logout.service";
 import {AuthService} from "../../services/auth.service";
-import {MatRipple} from "@angular/material/core";
+import {MAT_DATE_LOCALE, MatRipple, provideNativeDateAdapter} from "@angular/material/core";
 import {ChangePasswordComponent} from "../change-password/change-password.component";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {
+  DateRange,
+  ExtractDateTypeFromSelection,
+  MatDatepickerInputEvent, MatDatepickerModule,
+  MatDatepickerToggle,
+  MatDateRangeInput,
+  MatDateRangePicker,
+  MatEndDate,
+  MatStartDate
+} from "@angular/material/datepicker";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
+  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+  ],
   imports: [
     MatToolbarModule,
     MatMenuModule,
@@ -60,7 +72,14 @@ import {MatSort} from "@angular/material/sort";
     MatTooltip,
     MatLabel,
     MatRipple,
-    MatPaginator
+    MatPaginator,
+    MatDateRangeInput,
+    MatDatepickerToggle,
+    MatDateRangePicker,
+    MatStartDate,
+    MatEndDate,
+    MatDatepickerModule,
+    MatSuffix
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -76,7 +95,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   calibrationDate: string = "";
   batches: MatTableDataSource<unknown, MatPaginator> = new MatTableDataSource();
   displayedColumns: any[] = ["batchNumber", "quantity", "calibrationDate", "inspector", "masterCertificate", "jungCSV", "areteBatchNumber"];
-
+  startDate: string | undefined;
+  endDate: string | undefined;
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ts-ignore
@@ -217,5 +237,31 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.batches.filter = filterValue.trim().toLowerCase();
+  }
+
+
+  selectStartDate(event: MatDatepickerInputEvent<ExtractDateTypeFromSelection<DateRange<any>>, DateRange<any>>) {
+    this.startDate = new Date(event.target.value).toLocaleDateString("en-GB");
+  }
+
+  selectEndDate(event: MatDatepickerInputEvent<ExtractDateTypeFromSelection<DateRange<any>>, DateRange<any>>) {
+    this.endDate = new Date(event.target.value).toLocaleDateString("en-GB");
+    console.log(this.startDate, this.endDate);
+  }
+
+  generateReport() {
+    if (this.startDate && this.endDate) {
+      this.batchService.generateReport(this.startDate, this.endDate).subscribe({
+        next: (response: any) => {
+         console.log(response);
+         this.toastrService.success('Report is being generated. You will receive an email shortly', 'Report');
+        },
+        error: (error: any) => {
+          this.toastrService.error('Error generating report. Please contact administrator to fix the issue', 'Error');
+        }
+      });
+    } else {
+      this.toastrService.error('Please select start and end date', 'Invalid Date Range');
+    }
   }
 }

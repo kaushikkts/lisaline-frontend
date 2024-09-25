@@ -23,6 +23,19 @@
 
 
 .content {
+  margin: 30px;
+  padding: 20px;
+    &__batch-history {
+      &__generate-report {
+        display: flex;
+        justify-content: flex-start;
+
+        margin-top: 20px;
+      }
+    }
+
+
+
     &__batch {
         display: flex;
         flex-direction: column;
@@ -34,7 +47,6 @@
             font-weight: bold;
           }
         }
-
         &__form {
           display: flex;
 

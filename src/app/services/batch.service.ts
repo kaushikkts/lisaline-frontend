@@ -34,4 +34,8 @@ export class BatchService {
     return this.http.post(`https://65.20.79.92.nip.io/api/batch/files/${batchPK}`, form, {
     });
   }
+
+  generateReport(startDate: string, endDate: string) {
+    return this.http.post('https://65.20.79.92.nip.io/api/report', {startDate, endDate});
+  }
 }

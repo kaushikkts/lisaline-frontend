@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MAT_DIALOG_DATA, MatDialogContent} from "@angular/material/dialog";
@@ -42,7 +42,7 @@ import {NgForOf} from "@angular/common";
 export class ReviewCertificateComponent implements OnInit {
   reviewCertificateData: any;
   tempValidation: FormArray<any> = new FormArray<any>([]);
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder) {
     console.log(data);
   }
   form = new FormGroup({
@@ -58,11 +58,7 @@ export class ReviewCertificateComponent implements OnInit {
       serialNumber: new FormControl(''),
       accuracy: new FormControl(''),
     }),
-    temperatureAndHumidity: new FormGroup({
-      temperature: new FormControl(''),
-      humidity: new FormControl(''),
-    }),
-    temperatureValidation: new FormArray<any>([])
+    temperatureValidation: this.formBuilder.array([])
   });
   temperatureValidationColumns: string[] = ['setPoints', 'deviation', 'result'];
 
@@ -89,10 +85,6 @@ export class ReviewCertificateComponent implements OnInit {
         serialNumber: new FormControl(this.reviewCertificateData?.referenceInstrumentation.serialNumber),
         accuracy: new FormControl(this.reviewCertificateData?.referenceInstrumentation.accuracy),
       }),
-      temperatureAndHumidity: new FormGroup({
-        temperature: new FormControl(this.reviewCertificateData?.temperatureAndHumidity.temperature),
-        humidity: new FormControl(this.reviewCertificateData?.temperatureAndHumidity.humidity),
-      }),
       temperatureValidation: this.tempValidation
     });
   }
@@ -109,4 +101,8 @@ export class ReviewCertificateComponent implements OnInit {
   }
 
   protected readonly JSON = JSON;
+
+  setPointChanged(element: any) {
+    console.log(element);
+  }
 }

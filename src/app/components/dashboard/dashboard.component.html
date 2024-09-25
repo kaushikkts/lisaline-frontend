@@ -1,7 +1,7 @@
 <div class="container">
   <!-- Navigation Start -->
   <nav class="navigation">
-    <h1 class="navigation__title">LISALINE</h1>
+    <h1 class="navigation__title">DEGRITE</h1>
     <div class="navigation__menu">
       <button mat-icon-button class="navigation__menu__settings_button" aria-label="Example icon button with a menu icon" [matMenuTriggerFor]="menu">
         <mat-icon>settings</mat-icon>
@@ -65,11 +65,27 @@
       <div class="content__batch-history__header">
         <h2 class="content__batch-history__header__title">Batch History</h2>
       </div>
+      <div class="content__batch-history__generate-report">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate matInput placeholder="Start date" (dateChange)="selectStartDate($event)"  />
+            <input matEndDate matInput placeholder="End date" (dateChange)="selectEndDate($event)"/>
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <button matIconSuffix mat-icon-button (click)="generateReport()">
+            <mat-icon matTooltip="Generate Report">assignment</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
       <div class="content__batch-history__table">
         <mat-form-field appearance="outline">
           <mat-label>Filter</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
         </mat-form-field>
+
         <table mat-table [dataSource]="batches" class="content__batch-history__table__table">
           <ng-container matColumnDef="batchNumber">
             <th mat-header-cell *matHeaderCellDef> Batch ID </th>
