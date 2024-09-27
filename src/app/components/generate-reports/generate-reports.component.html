@@ -1,0 +1,25 @@
+<mat-dialog-content class="container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="reportsForm">
+    <div class="">
+      <h2>Generate Reports</h2>
+    </div>
+    <div class="container__content">
+      <mat-form-field appearance="outline">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate matInput placeholder="Start date" [formControl]="reportsForm.controls.startDate"  />
+          <input matEndDate matInput placeholder="End date" [formControl]="reportsForm.controls.endDate"/>
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email to send the report to</mat-label>
+        <input matInput [formControl]="reportsForm.controls.email" type="email"/>
+      </mat-form-field>
+      <div>
+        <button mat-button color="primary" type="submit">Generate Report</button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>

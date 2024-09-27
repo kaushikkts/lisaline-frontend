@@ -1,13 +1,38 @@
+.drawer {
+  height: 100%;
+
+  &__side_nav {
+    background-color: #4954d0;
+    width: 200px;
+
+
+    &__items {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      margin-top: 50px;
+
+
+      &__item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: white;
+
+
+      }
+    }
+  }
+}
 .navigation {
   display: flex;
-  background-color: #2f3ea0;
 
   &__title {
     flex: 1;
-    margin: 0;
     text-align: center;
-    color: white;
     align-self: center;
+    margin-top: 20px;
   }
 
   &__menu {
@@ -25,59 +50,53 @@
 .content {
   margin: 30px;
   padding: 20px;
-    &__batch-history {
-      &__generate-report {
-        display: flex;
-        justify-content: flex-start;
+  &__batch {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      &__header {
+          margin: 0 auto;
 
-        margin-top: 20px;
+        &__title {
+          font-weight: bold;
+        }
       }
-    }
-
-
-
-    &__batch {
+      &__form {
         display: flex;
-        flex-direction: column;
-        margin-top: 20px;
-        &__header {
-            margin: 0 auto;
 
-          &__title {
-            font-weight: bold;
-          }
-        }
-        &__form {
+        &__submit {
           display: flex;
-
-          &__submit {
-            display: flex;
-            justify-content: center;
-          }
-
-          &__input {
-            display: flex;
-            justify-content: space-evenly;
-            margin: 10px 0;
-          }
-
-          &__uploads {
-            display: flex;
-            justify-content: space-evenly;
-            margin: 10px 0;
-
-            &__container {
-              display: flex;
-              flex-direction: column;
-              margin: 10px;
-            }
-
-            &__button {
-              margin: 10px;
-            }
-          }
-
-
+          justify-content: center;
         }
-    }
+
+        &__input {
+          display: flex;
+          justify-content: space-evenly;
+          margin: 10px 0;
+        }
+
+        &__uploads {
+          display: flex;
+          justify-content: space-evenly;
+          margin: 10px 0;
+
+          &__container {
+            display: flex;
+            flex-direction: column;
+            margin: 10px;
+          }
+
+          &__button {
+            margin: 10px;
+          }
+        }
+
+
+      }
+  }
 }
+
+mat-divider{
+  border-top-color: white;
+}
+

@@ -28,9 +28,7 @@ export class LoginComponent {
   }
 
   login() {
-   console.log(this.authForm.value);
    const auth = this.authForm.value;
-   console.log(auth?.email, auth?.password);
    this.authService.login(auth?.email, auth?.password).subscribe({
      next: (response: any) => {
        if (response.email) {

@@ -40,12 +40,15 @@ import {
   MatEndDate,
   MatStartDate
 } from "@angular/material/datepicker";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListItem, MatNavList} from "@angular/material/list";
+import {MatDivider} from "@angular/material/divider";
+import {GenerateReportsComponent} from "../generate-reports/generate-reports.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
-  ],
+
   imports: [
     MatToolbarModule,
     MatMenuModule,
@@ -79,7 +82,11 @@ import {
     MatStartDate,
     MatEndDate,
     MatDatepickerModule,
-    MatSuffix
+    MatSuffix,
+    MatSidenavModule,
+    MatNavList,
+    MatListItem,
+    MatDivider
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -250,18 +257,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   generateReport() {
-    if (this.startDate && this.endDate) {
-      this.batchService.generateReport(this.startDate, this.endDate).subscribe({
-        next: (response: any) => {
-         console.log(response);
-         this.toastrService.success('Report is being generated. You will receive an email shortly', 'Report');
-        },
-        error: (error: any) => {
-          this.toastrService.error('Error generating report. Please contact administrator to fix the issue', 'Error');
-        }
-      });
-    } else {
-      this.toastrService.error('Please select start and end date', 'Invalid Date Range');
-    }
+    this.dialog.open(GenerateReportsComponent, {panelClass: "dialog-responsive"});
   }
 }
