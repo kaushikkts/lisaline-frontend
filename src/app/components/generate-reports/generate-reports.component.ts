@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatDialogContent} from "@angular/material/dialog";
+import {MatDialogContent, MatDialogRef} from "@angular/material/dialog";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {
   MatDatepickerToggle,
   MatDateRangeInput,
@@ -20,7 +20,7 @@ import {MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core"
 @Component({
   selector: 'app-generate-reports',
   standalone: true,
-  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
+  providers: [provideNativeDateAdapter()],
   imports: [
     MatButton,
     MatDialogContent,
@@ -43,27 +43,33 @@ import {MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core"
 })
 export class GenerateReportsComponent {
 
-  constructor(private batchService: BatchService, private toastrService: ToastrService) {}
+  constructor(private batchService: BatchService, private toastrService: ToastrService, public dialogRef: MatDialogRef<GenerateReportsComponent>) {}
   reportsForm = new FormGroup({
-    'startDate': new FormControl(''),
-    'endDate': new FormControl(''),
-    'email': new FormControl('')
+    'startDate': new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    'endDate': new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+    'email': new FormControl('', {validators: [Validators.required, Validators.email]})
   })
 
   onSubmit() {
-    console.log(this.reportsForm.value);
-    // if (this.reportsForm.valid) {
-    //   this.batchService.generateReport(this.startDate, this.endDate).subscribe({
-    //     next: (response: any) => {
-    //       console.log(response);
-    //       this.toastrService.success('Report is being generated. You will receive an email shortly', 'Report');
-    //     },
-    //     error: (error: any) => {
-    //       this.toastrService.error('Error generating report. Please contact administrator to fix the issue', 'Error');
-    //     }
-    //   });
-    // } else {
-    //   this.toastrService.error('Please select start and end date', 'Invalid Date Range');
-    // }
+    const startDate  = this.reportsForm.value.startDate || "";
+    const formattedStartDate = new Date(startDate).toLocaleDateString("en-GB");
+    const endDate = this.reportsForm.value.endDate || "";
+    const formattedEndDate = new Date(endDate).toLocaleDateString("en-GB");
+    if (this.reportsForm.valid) {
+      this.batchService.generateReport(formattedStartDate, formattedEndDate, this.reportsForm.value.email || "").subscribe({
+        next: (response: any) => {
+          console.log(response);
+          this.toastrService.success('Report is being generated. You will receive an email shortly', 'Report');
+          this.dialogRef.close();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.toastrService.error('Error generating report. Please contact administrator to fix the issue', 'Error');
+        }
+      });
+    } else {
+      console.log(this.reportsForm.valid);
+      this.toastrService.error('Please fill in all the fields', 'Form Error');
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-
+import environment from '../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +14,7 @@ export class BatchService {
     console.log(batch);
     batch = {...batch, inspector: JSON.parse(<string>localStorage.getItem('token')).id};
     console.log(batch)
-    return this.http.post('http://13.201.79.100:3000/api/batch', batch, {
+    return this.http.post(`${environment.apiBaseUrl}/api/batch`, batch, {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -24,18 +24,18 @@ export class BatchService {
   uploadMasterCertificate(file: any, batchPK: string) {
     let form = new FormData();
     form.append('master_certificate', file);
-    return this.http.post(`http://13.201.79.100:3000/api/batch/files/${batchPK}`, form, {
+    return this.http.post(`${environment.apiBaseUrl}api/batch/files/${batchPK}`, form, {
     });
   }
 
   uploadJungCSV(file: any, batchPK: string) {
     let form = new FormData();
     form.append('jung_csv', file);
-    return this.http.post(`http://13.201.79.100:3000/api/batch/files/${batchPK}`, form, {
+    return this.http.post(`${environment.apiBaseUrl}/api/batch/files/${batchPK}`, form, {
     });
   }
 
-  generateReport(startDate: string, endDate: string) {
-    return this.http.post('http://13.201.79.100:3000/api/report', {startDate, endDate});
+  generateReport(startDate: string, endDate: string, email: string) {
+    return this.http.post(`${environment.apiBaseUrl}/api/report`, {startDate, endDate, email});
   }
 }

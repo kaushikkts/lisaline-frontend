@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {FormControl, ɵValue} from "@angular/forms";
-
+import environment from "../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +14,7 @@ export class AuthService {
   }
 
   login(email: ɵValue<FormControl<string | null>> | undefined, password: ɵValue<FormControl<string | null>> | undefined) {
-    return this.http.post('http://13.201.79.100:3000/api/login', {email: email, password: password}, {
+    return this.http.post(`${environment.apiBaseUrl}/api/login`, {email: email, password: password}, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -29,7 +29,7 @@ export class AuthService {
   changePassword(changePasswordBody: any) {
     console.log(changePasswordBody);
     const email = JSON.parse(<string>localStorage.getItem('token')).email;
-    return this.http.post('http://13.201.79.100:3000/api/change-password', {
+    return this.http.post(`${environment.apiBaseUrl}/api/change-password`, {
       email: email,
       currentPassword: changePasswordBody.currentPassword,
       newPassword: changePasswordBody.newPassword

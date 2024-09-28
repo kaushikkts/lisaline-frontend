@@ -24,16 +24,13 @@ import {
 } from "@angular/material/table";
 import {MatTooltip} from "@angular/material/tooltip";
 import {ToastrService} from "ngx-toastr";
-import {LogoutService} from "../../services/logout.service";
 import {AuthService} from "../../services/auth.service";
 import {MAT_DATE_LOCALE, MatRipple, provideNativeDateAdapter} from "@angular/material/core";
 import {ChangePasswordComponent} from "../change-password/change-password.component";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {
-  DateRange,
-  ExtractDateTypeFromSelection,
-  MatDatepickerInputEvent, MatDatepickerModule,
+  MatDatepickerModule,
   MatDatepickerToggle,
   MatDateRangeInput,
   MatDateRangePicker,
@@ -244,16 +241,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.batches.filter = filterValue.trim().toLowerCase();
-  }
-
-
-  selectStartDate(event: MatDatepickerInputEvent<ExtractDateTypeFromSelection<DateRange<any>>, DateRange<any>>) {
-    this.startDate = new Date(event.target.value).toLocaleDateString("en-GB");
-  }
-
-  selectEndDate(event: MatDatepickerInputEvent<ExtractDateTypeFromSelection<DateRange<any>>, DateRange<any>>) {
-    this.endDate = new Date(event.target.value).toLocaleDateString("en-GB");
-    console.log(this.startDate, this.endDate);
   }
 
   generateReport() {
