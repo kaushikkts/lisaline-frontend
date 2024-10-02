@@ -15,7 +15,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {ToastrService} from "ngx-toastr";
 import {BatchService} from "../../services/batch.service";
-import {MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core";
+import {provideNativeDateAdapter} from "@angular/material/core";
 
 @Component({
   selector: 'app-generate-reports',

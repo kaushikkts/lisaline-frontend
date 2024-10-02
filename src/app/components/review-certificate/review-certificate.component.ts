@@ -42,12 +42,10 @@ import {NgForOf} from "@angular/common";
 export class ReviewCertificateComponent implements OnInit {
   reviewCertificateData: any;
   tempValidation: FormArray<any> = new FormArray<any>([]);
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder) {
-    console.log(data);
-  }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder) {}
   form = new FormGroup({
     productDetails: new FormGroup({
-      name: new FormControl('test'),
+      name: new FormControl(''),
       type: new FormControl(''),
       resolution: new FormControl(''),
       range: new FormControl(''),

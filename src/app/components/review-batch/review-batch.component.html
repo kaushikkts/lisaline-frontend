@@ -1,0 +1,24 @@
+<div class="container">
+  <form (ngSubmit)="submitChanges()" [formGroup]="batchForm">
+    <div class="container__title">
+      <h2>Review Batch</h2>
+    </div>
+    <div class="container__batch">
+      <mat-form-field appearance="outline">
+        <mat-label>Arete Batch Number</mat-label>
+        <input matInput placeholder="Arete Batch Number" [formControl]="batchForm.controls.areteBatchNumber">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Serial Number</mat-label>
+        <input matInput placeholder="Serial Number" [formControl]="batchForm.controls.quantity">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Remarks</mat-label>
+        <input matInput placeholder="Enter Remarks" [formControl]="batchForm.controls.remarks">
+      </mat-form-field>
+    </div>
+    <div class="container__buttons">
+      <button mat-flat-button color="primary" type="submit">Submit</button>
+    </div>
+  </form>
+</div>

@@ -41,6 +41,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListItem, MatNavList} from "@angular/material/list";
 import {MatDivider} from "@angular/material/divider";
 import {GenerateReportsComponent} from "../generate-reports/generate-reports.component";
+import {ReviewBatchComponent} from "../review-batch/review-batch.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -98,7 +99,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   jungCSVFileName: string = "";
   calibrationDate: string = "";
   batches: MatTableDataSource<unknown, MatPaginator> = new MatTableDataSource();
-  displayedColumns: any[] = ["batchNumber", "quantity", "calibrationDate", "inspector", "masterCertificate", "jungCSV", "areteBatchNumber"];
+  displayedColumns: any[] = ["batchNumber", "quantity", "calibrationDate", "inspector", "masterCertificate", "jungCSV", "areteBatchNumber", "remarks", "edit"];
   startDate: string | undefined;
   endDate: string | undefined;
   // @ts-ignore
@@ -226,6 +227,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   loadAllBatches() {
     this.reviewService.getAllBatches().subscribe((response: any) => {
+      console.log(response);
       this.batches.data = response;
     })
   }
@@ -245,5 +247,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   generateReport() {
     this.dialog.open(GenerateReportsComponent, {panelClass: "dialog-responsive"});
+  }
+
+  editBatch(element: any) {
+    this.dialog.open(ReviewBatchComponent, {data: element}).afterClosed().subscribe({
+      next: () => {
+        this.loadAllBatches();
+      }
+    });
   }
 }

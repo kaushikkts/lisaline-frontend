@@ -24,7 +24,7 @@ export class BatchService {
   uploadMasterCertificate(file: any, batchPK: string) {
     let form = new FormData();
     form.append('master_certificate', file);
-    return this.http.post(`${environment.apiBaseUrl}api/batch/files/${batchPK}`, form, {
+    return this.http.post(`${environment.apiBaseUrl}/api/batch/files/${batchPK}`, form, {
     });
   }
 
