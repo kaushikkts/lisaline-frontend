@@ -9,8 +9,8 @@ export class ReviewCertificateService {
 
   constructor(private http: HttpClient) { }
 
-  getCertificateData(batchId: string) {
-    return this.http.get(`${environment.apiBaseUrl}/api/review/${batchId}`);
+  updateCertificateData(certificate: any, batchId: string) {
+    return this.http.put(`${environment.apiBaseUrl}/api/update-certificate-data/${batchId}`, certificate);
   }
 
   getAllBatches() {

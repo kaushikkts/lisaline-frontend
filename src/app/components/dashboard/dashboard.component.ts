@@ -155,7 +155,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.toastrService.success('Master Certificate uploaded successfully', 'Success');
         this.loadAllBatches();
         console.log(response);
-        this.dialog.open(ReviewCertificateComponent, {data: response?.data[0]?.content});
+        this.dialog.open(ReviewCertificateComponent, {data: response});
       },
       error: (error: any) => {
         this.toastrService.error('Error uploading Master Certificate', 'Error');

@@ -13,6 +13,9 @@ import {
   MatTable
 } from "@angular/material/table";
 import {NgForOf} from "@angular/common";
+import {MatButton} from "@angular/material/button";
+import {ReviewCertificateService} from "../../services/review-certificate.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-review-certificate',
@@ -34,7 +37,8 @@ import {NgForOf} from "@angular/common";
     MatRowDef,
     MatDialogContent,
     FormsModule,
-    NgForOf
+    NgForOf,
+    MatButton
   ],
   templateUrl: './review-certificate.component.html',
   styleUrl: './review-certificate.component.scss'
@@ -42,7 +46,11 @@ import {NgForOf} from "@angular/common";
 export class ReviewCertificateComponent implements OnInit {
   reviewCertificateData: any;
   tempValidation: FormArray<any> = new FormArray<any>([]);
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public uploadedCertificateData: any,
+              private formBuilder: FormBuilder,
+              private reviewCertificateService: ReviewCertificateService,
+              private toastrService: ToastrService
+  ) {}
   form = new FormGroup({
     productDetails: new FormGroup({
       name: new FormControl(''),
@@ -61,7 +69,7 @@ export class ReviewCertificateComponent implements OnInit {
   temperatureValidationColumns: string[] = ['setPoints', 'deviation', 'result'];
 
   ngOnInit() {
-    this.reviewCertificateData = this.data;
+    this.reviewCertificateData = this.uploadedCertificateData?.data[0]?.content;
     for (let i = 0; i < this.reviewCertificateData?.temperatureValidation.length; i++) {
       this.tempValidation.push(new FormGroup({
         setPoints: new FormControl(this.reviewCertificateData?.temperatureValidation[i].setPoints),
@@ -87,20 +95,19 @@ export class ReviewCertificateComponent implements OnInit {
     });
   }
 
-
-  get temperatureValidationValues() {
-    let test = this.form.get('temperatureValidation') as FormArray;
-
-
-    return this.form.get('temperatureValidation') as FormArray;
-  }
   submitChanges() {
     console.log(this.form.value);
+    this.reviewCertificateService.updateCertificateData(this.form.value, this.uploadedCertificateData?.batchId).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.toastrService.success('Certificate updated successfully');
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.toastrService.error(`Error updating certificate: ${error.error.message}`);
+      }
+    });
+
   }
 
-  protected readonly JSON = JSON;
-
-  setPointChanged(element: any) {
-    console.log(element);
-  }
 }
