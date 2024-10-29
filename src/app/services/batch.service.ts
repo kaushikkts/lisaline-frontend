@@ -24,14 +24,14 @@ export class BatchService {
   uploadMasterCertificate(file: any, batchPK: string) {
     let form = new FormData();
     form.append('master_certificate', file);
-    return this.http.post(`${environment.apiBaseUrl}/api/batch/files/${batchPK}`, form, {
+    return this.http.post(`${environment.apiBaseUrl}/api/batch/files/master-certificate/${batchPK}`, form, {
     });
   }
 
   uploadJungCSV(file: any, batchPK: string) {
     let form = new FormData();
     form.append('jung_csv', file);
-    return this.http.post(`${environment.apiBaseUrl}/api/batch/files/${batchPK}`, form, {
+    return this.http.post(`${environment.apiBaseUrl}/api/batch/files/jung-csv/${batchPK}`, form, {
     });
   }
 

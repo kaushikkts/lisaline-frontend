@@ -143,30 +143,46 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   uploadMasterCertificate(event: any, element: any) {
-    if (event.target.files[0]["type"] !== 'application/pdf') {
-      this.toastrService.error('Please upload a PDF file', 'Invalid File Type');
+    console.log(event.target.files[0]);
+
+    if (event.target.files[0]["type"] === 'application/vnd.ms-excel'
+      ||
+      event.target.files[0]["type"] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      ||
+      event.target.files[0]["type"] === 'text/csv'
+    ) {
+      this.masterCertificate = event.target.files[0];
+      this.masterCertificateFileName = event.target.files[0].name;
+      this.toastrService.info(`Uploading Master Certificate ${this.masterCertificateFileName}`);
+      this.batchService.uploadMasterCertificate(this.masterCertificate, element?.id).subscribe({
+        next: (response: any) => {
+          this.toastrService.success('Master Certificate uploaded successfully', 'Success');
+          this.loadAllBatches();
+          console.log(response);
+          this.dialog.open(ReviewCertificateComponent, {data: response});
+        },
+        error: (error: any) => {
+          this.toastrService.error('Error uploading Master Certificate', 'Error');
+          console.log(error);
+        }
+      })
+      console.log(`Value of element : - ${element?.id}`);
+    } else {
+      this.toastrService.error('Please upload a Excel file', 'Invalid File Type');
       return;
     }
-    this.masterCertificate = event.target.files[0];
-    this.masterCertificateFileName = event.target.files[0].name;
-    this.toastrService.info(`Uploading Master Certificate ${this.masterCertificateFileName}`);
-    this.batchService.uploadMasterCertificate(this.masterCertificate, element?.id).subscribe({
-      next: (response: any) => {
-        this.toastrService.success('Master Certificate uploaded successfully', 'Success');
-        this.loadAllBatches();
-        console.log(response);
-        this.dialog.open(ReviewCertificateComponent, {data: response});
-      },
-      error: (error: any) => {
-        this.toastrService.error('Error uploading Master Certificate', 'Error');
-        console.log(error);
-      }
-    })
-    console.log(`Value of element : - ${element?.id}`);
+
   }
 
   uploadJungCSV(event: any, element: any) {
-    if (event.target.files[0]["type"] === 'application/vnd.ms-excel') {
+    console.log(event.target.files[0]["type"]);
+    if (
+      event.target.files[0]["type"] === 'application/vnd.ms-excel'
+      ||
+      event.target.files[0]["type"] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      ||
+      event.target.files[0]["type"] === 'text/csv'
+    ) {
       const jungCSV = event.target.files[0];
       const jungCSVFileName = event.target.files[0].name;
       this.calibrationDate = this.jungCSVFileName.split('_').join(',').split('.')[0].split(',')[1];
